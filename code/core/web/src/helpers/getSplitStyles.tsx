@@ -208,6 +208,7 @@ export const getSplitStyles: StyleSplitter = (
     componentState,
     staticConfig,
     style: null,
+    originalVariantStyles: {},
     theme,
     usedKeys: {},
     viewProps,
@@ -1304,6 +1305,15 @@ export const getSplitStyles: StyleSplitter = (
     time`split-styles-pre-result`
   }
 
+  if (process.env.NODE_ENV === 'development') {    
+    // Merge original variant props with the resolved styles
+    styleState.style = {
+      ...filterTokens(props),
+      ...filterTokens(styleState.originalVariantStyles),
+      ...styleState.style,
+    };
+  }
+
   const result: GetStyleResult = {
     space,
     hasMedia,
@@ -1678,4 +1688,13 @@ function applyDefaultStyle(pkey: string, styleState: GetStyleState) {
   ) {
     mergeStyle(styleState, pkey, defaultValues, 1)
   }
+}
+
+function filterTokens(tokens: Record<string, any>) {
+  return Object.entries(tokens).reduce((acc, [key, value]) => {
+    if (typeof value === 'string' && value.startsWith('$')) {
+      acc[`${key}Token`] = value;
+    }
+    return acc;
+  }, {});
 }
