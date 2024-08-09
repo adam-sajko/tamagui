@@ -144,6 +144,14 @@ const resolveVariants: StyleResolver = (
     }
   }
 
+  if (process.env.NODE_ENV === 'development' && isObj(variantValue)) {
+    // Store the original $-prefixed value for debugging
+    styleState.originalVariantStyles = {
+      ...styleState.originalVariantStyles,
+      ...variantValue,
+    }
+  }
+
   let fontFamilyResult: any
 
   if (isObj(variantValue)) {
