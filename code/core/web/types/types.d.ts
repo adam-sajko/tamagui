@@ -1563,6 +1563,7 @@ export type TamaguiProviderProps = Omit<ThemeProviderProps, 'children'> & {
 export type PropMappedValue = [string, any][] | undefined;
 export type GetStyleState = {
     style: TextStyle | null;
+    originalVariantStyles: Record<string, any>;
     usedKeys: Record<string, number>;
     classNames: ClassNamesObject;
     staticConfig: StaticConfig;
